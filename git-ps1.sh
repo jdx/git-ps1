@@ -29,11 +29,13 @@ BRANCH=${BRANCH#refs/heads/}
 GIT_STATUS=$( git status 2>/dev/null )
 
 STATUS=''
-COLOR_DEFAULT=33
-COLOR_FASTFWD=31
-COLOR_STAGED=32
-COLOR_UNTRACKED=31
-COLOR="\[\033[00;${COLOR_DEFAULT}m\]"
+COLOR_ESC_PRE="\[\033[00;"
+COLOR_ESC_POST="m\]"
+COLOR_DEFAULT="${COLOR_ESC_PRE}33$COLOR_ESC_POST"
+COLOR_FASTFWD="${COLOR_ESC_PRE}31$COLOR_ESC_POST"
+COLOR_STAGED="${COLOR_ESC_PRE}32$COLOR_ESC_POST"
+COLOR_UNTRACKED="${COLOR_ESC_PRE}31$COLOR_ESC_POST"
+COLOR=$COLOR_DEFAULT
 
 # uncommited files
 if [ "$( echo $GIT_STATUS | grep 'Changed\|uncommitted' )" ]; then
@@ -42,23 +44,23 @@ fi
 
 # not on branch/behind origin
 if [ "$( echo $GIT_STATUS | grep 'Not currently on\|is behind' )" ]; then
-    COLOR="\[\033[0;${COLOR_FASTFWD}m\]"
+    COLOR=$COLOR_FASTFWD
 fi
 
 # staged
 if [ "$( echo $GIT_STATUS | grep 'to be committed' )" ]; then
-    STATUS="$STATUS\[\033[0;${COLOR_STAGED}m\]*"
+    STATUS="${STATUS}${COLOR_STAGED}*"
 fi
 
 # untracked
 if [ "$( echo $GIT_STATUS | grep 'Untracked' )" ]; then
-    STATUS="$STATUS\[\033[0;${COLOR_UNTRACKED}m\]*"
+    STATUS="${STATUS}${COLOR_UNTRACKED}*"
 fi
 
 if [ "$( echo $GIT_STATUS | grep 'is ahead' )" ]; then
     AHEAD_COUNT=$( echo $GIT_STATUS | grep -o 'by [0-9]\+ commits\?' | cut -d' ' -f2 )
-    STATUS="$STATUS$COLOR@$AHEAD_COUNT"
+    STATUS="${STATUS}${COLOR}@${AHEAD_COUNT}"
 fi
 
 # output the status string
-echo " $COLOR[$BRANCH$STATUS$COLOR]"
+echo " $COLOR[${BRANCH}${STATUS}${COLOR}]"
