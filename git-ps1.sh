@@ -35,11 +35,13 @@ COLOR_DEFAULT="${COLOR_ESC_PRE}33$COLOR_ESC_POST"
 COLOR_FASTFWD="${COLOR_ESC_PRE}31$COLOR_ESC_POST"
 COLOR_STAGED="${COLOR_ESC_PRE}32$COLOR_ESC_POST"
 COLOR_UNTRACKED="${COLOR_ESC_PRE}31$COLOR_ESC_POST"
+COLOR_UNSTAGED=$COLOR_DEFAULT
+COLOR_AHEAD=$COLOR_DEFAULT
 COLOR=$COLOR_DEFAULT
 
 # uncommited files
 if [ "$( echo $GIT_STATUS | grep 'Changed\|uncommitted' )" ]; then
-    STATUS="$STATUS*"
+    STATUS="${STATUS}${COLOR_UNSTAGED}*"
 fi
 
 # not on branch/behind origin
@@ -63,7 +65,7 @@ if [ "$( echo $GIT_STATUS | grep 'is ahead' )" ]; then
         | grep -o 'by [0-9]\+ commits\?' \
         | cut -d' ' -f2 \
     )
-    STATUS="${STATUS}${COLOR}@${AHEAD_COUNT}"
+    STATUS="${STATUS}${COLOR_AHEAD}@${AHEAD_COUNT}"
 fi
 
 # output the status string
