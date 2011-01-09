@@ -32,7 +32,7 @@ STATUS=''
 COLOR="\[\033[00;33m\]"
 
 # uncommited files
-if [ "$( echo $GIT_STATUS | grep -P 'Changed|uncommitted' )" ]; then
+if [ "$( echo $GIT_STATUS | grep 'Changed\|uncommitted' )" ]; then
     STATUS="$STATUS*"
 fi
 
@@ -42,7 +42,7 @@ if [ "$( echo $GIT_STATUS | grep 'Not currently on\|is behind' )" ]; then
 fi
 
 # staged
-if [ "$( echo $GIT_STATUS | grep -P 'to be committed' )" ]; then
+if [ "$( echo $GIT_STATUS | grep 'to be committed' )" ]; then
     STATUS="$STATUS\[\033[0;32m\]*"
 fi
 
@@ -52,7 +52,7 @@ if [ "$( echo $GIT_STATUS | grep 'Untracked' )" ]; then
 fi
 
 if [ "$( echo $GIT_STATUS | grep 'is ahead' )" ]; then
-    AHEAD_COUNT=$( echo $GIT_STATUS | grep -oP 'by [0-9]+ commits?' | cut -d' ' -f2 )
+    AHEAD_COUNT=$( echo $GIT_STATUS | grep -o 'by [0-9]\+ commits\?' | cut -d' ' -f2 )
     STATUS="$STATUS$COLOR@$AHEAD_COUNT"
 fi
 
