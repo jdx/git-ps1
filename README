@@ -1,0 +1,10 @@
+git-ps1 - git-augmented PS1 for BASH
+
+To use, modify your PS1 variable (e.g. in ~/.bashrc) to include the script:
+  PS1="$PS1\$($( cat git-ps1.sh ))"
+
+This script produces output in a number of different colors. To ensure the
+prompt operates correctly, non-printable characters must be escaped (\[\]).
+However, these characters are not recognized when output from an external
+script. Therefore, the script must be inserted directly into the PS1 string,
+where echoing the escape sequence will produce the intended result.
