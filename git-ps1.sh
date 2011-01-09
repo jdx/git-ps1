@@ -58,7 +58,10 @@ if [ "$( echo $GIT_STATUS | grep 'Untracked' )" ]; then
 fi
 
 if [ "$( echo $GIT_STATUS | grep 'is ahead' )" ]; then
-    AHEAD_COUNT=$( echo $GIT_STATUS | grep -o 'by [0-9]\+ commits\?' | cut -d' ' -f2 )
+    AHEAD_COUNT=$( echo $GIT_STATUS \
+        | grep -o 'by [0-9]\+ commits\?' \
+        | cut -d' ' -f2 \
+    )
     STATUS="${STATUS}${COLOR}@${AHEAD_COUNT}"
 fi
 
