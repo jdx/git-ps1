@@ -2,6 +2,8 @@
 #
 # git-ps1 - git-augmented PS1
 #
+# See README for configuration options.
+#
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 3 of the License, or
@@ -25,18 +27,24 @@ if [ -z "$BRANCH" ]; then
     exit
 fi
 
+# creates a color from the given color code
+mkcolor()
+{
+    echo "\[\033[00;$1m\]"
+}
+
 BRANCH=${BRANCH#refs/heads/}
 GIT_STATUS=$( git status 2>/dev/null )
 
+# colors can be overridden via the GITPS1_COLOR_* environment variables
+COLOR_DEFAULT=$( mkcolor ${GITPS1_COLOR_DEFAULT:-33} )
+COLOR_FASTFWD=$( mkcolor ${GITPS1_COLOR_FASTFWD:-31} )
+COLOR_STAGED=$( mkcolor ${GITPS1_COLOR_STAGED:-32} )
+COLOR_UNTRACKED=$( mkcolor ${GITPS1_COLOR_UNTRACKED:-31} )
+COLOR_UNSTAGED=$( mkcolor ${GITPS1_COLOR_UNSTAGED:-33} )
+COLOR_AHEAD=$( mkcolor ${GITPS1_COLOR_AHEAD:-33} )
+
 STATUS=''
-COLOR_ESC_PRE="\[\033[00;"
-COLOR_ESC_POST="m\]"
-COLOR_DEFAULT="${COLOR_ESC_PRE}33$COLOR_ESC_POST"
-COLOR_FASTFWD="${COLOR_ESC_PRE}31$COLOR_ESC_POST"
-COLOR_STAGED="${COLOR_ESC_PRE}32$COLOR_ESC_POST"
-COLOR_UNTRACKED="${COLOR_ESC_PRE}31$COLOR_ESC_POST"
-COLOR_UNSTAGED=$COLOR_DEFAULT
-COLOR_AHEAD=$COLOR_DEFAULT
 COLOR=$COLOR_DEFAULT
 
 # uncommited files

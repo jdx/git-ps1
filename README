@@ -1,5 +1,7 @@
 git-ps1 - git-augmented PS1 for BASH
 
+SETUP
+-----
 To use, modify your PS1 variable (e.g. in ~/.bashrc) to include the script:
   PS1="$PS1\$($( cat git-ps1.sh ))"
 
@@ -8,3 +10,17 @@ prompt operates correctly, non-printable characters must be escaped (\[\]).
 However, these characters are not recognized when output from an external
 script. Therefore, the script must be inserted directly into the PS1 string,
 where echoing the escape sequence will produce the intended result.
+
+CONFIGURATION
+-------------
+All configuration is done via GITPS1_* environment variables.
+
+Colors:
+  GITPS1_COLOR_DEFAULT   - Default color, used to display brackets and branch
+  GITPS1_COLOR_FASTFWD   - Color used for fast-forward indicator and used to
+                           display brackets and hash when not on a branch
+  GITPS1_COLOR_STAGED    - Color used to for staged changes indicator
+  GITPS1_COLOR_UNTRACKED - Color used for untracked files indicator
+  GITPS1_COLOR_UNSTAGED  - Color used for unstaged changes indicator
+  GITPS1_COLOR_AHEAD     - Color used for ahead indicator (ahead of tracking)
+
