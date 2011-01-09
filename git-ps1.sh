@@ -29,7 +29,11 @@ BRANCH=${BRANCH#refs/heads/}
 GIT_STATUS=$( git status 2>/dev/null )
 
 STATUS=''
-COLOR="\[\033[00;33m\]"
+COLOR_DEFAULT=33
+COLOR_FASTFWD=31
+COLOR_STAGED=32
+COLOR_UNTRACKED=31
+COLOR="\[\033[00;${COLOR_DEFAULT}m\]"
 
 # uncommited files
 if [ "$( echo $GIT_STATUS | grep 'Changed\|uncommitted' )" ]; then
@@ -38,17 +42,17 @@ fi
 
 # not on branch/behind origin
 if [ "$( echo $GIT_STATUS | grep 'Not currently on\|is behind' )" ]; then
-    COLOR="\[\033[0;31m\]"
+    COLOR="\[\033[0;${COLOR_FASTFWD}m\]"
 fi
 
 # staged
 if [ "$( echo $GIT_STATUS | grep 'to be committed' )" ]; then
-    STATUS="$STATUS\[\033[0;32m\]*"
+    STATUS="$STATUS\[\033[0;${COLOR_STAGED}m\]*"
 fi
 
 # untracked
 if [ "$( echo $GIT_STATUS | grep 'Untracked' )" ]; then
-    STATUS="$STATUS\[\033[0;31m\]*"
+    STATUS="$STATUS\[\033[0;${COLOR_UNTRACKED}m\]*"
 fi
 
 if [ "$( echo $GIT_STATUS | grep 'is ahead' )" ]; then
