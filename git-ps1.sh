@@ -44,12 +44,22 @@ COLOR_UNTRACKED=$( mkcolor ${GITPS1_COLOR_UNTRACKED:-31} )
 COLOR_UNSTAGED=$( mkcolor ${GITPS1_COLOR_UNSTAGED:-33} )
 COLOR_AHEAD=$( mkcolor ${GITPS1_COLOR_AHEAD:-33} )
 
+# indicators may be overridden via the GITPS1_IND_* environment vars; set to
+# '0' to disable
+IND_STAGED=${GITPS1_IND_STAGED:-*}
+IND_UNSTAGED=${GITPS1_IND_UNSTAGED:-*}
+IND_UNTRACKED=${GITPS1_IND_UNTRACKED:-*}
+IND_AHEAD=${GITPS1_IND_AHEAD:-@}
+IND_AHEAD_COUNT=${GITPS1_IND_AHEAD_COUNT:-@}
+
 STATUS=''
 COLOR=$COLOR_DEFAULT
 
 # uncommited files
-if [ "$( echo $GIT_STATUS | grep 'Changed\|uncommitted' )" ]; then
-    STATUS="${STATUS}${COLOR_UNSTAGED}*"
+if [ "$IND_UNSTAGED" != '0' ]; then
+    if [ "$( echo $GIT_STATUS | grep 'Changed\|uncommitted' )" ]; then
+        STATUS="${STATUS}${COLOR_UNSTAGED}${IND_UNSTAGED}"
+    fi
 fi
 
 # not on branch/behind origin
@@ -58,22 +68,33 @@ if [ "$( echo $GIT_STATUS | grep 'Not currently on\|is behind' )" ]; then
 fi
 
 # staged
-if [ "$( echo $GIT_STATUS | grep 'to be committed' )" ]; then
-    STATUS="${STATUS}${COLOR_STAGED}*"
+if [  "$IND_STAGED" != '0' ]; then
+    if [ "$( echo $GIT_STATUS | grep 'to be committed' )" ]; then
+        STATUS="${STATUS}${COLOR_STAGED}${IND_STAGED}"
+    fi
 fi
 
 # untracked
-if [ "$( echo $GIT_STATUS | grep 'Untracked' )" ]; then
-    STATUS="${STATUS}${COLOR_UNTRACKED}*"
+if [ "$IND_UNTRACKED" != '0' ]; then
+    if [ "$( echo $GIT_STATUS | grep 'Untracked' )" ]; then
+        STATUS="${STATUS}${COLOR_UNTRACKED}${IND_UNTRACKED}"
+    fi
 fi
 
 # ahead of tracking
-if [ "$( echo $GIT_STATUS | grep 'is ahead' )" ]; then
-    AHEAD_COUNT=$( echo $GIT_STATUS \
-        | grep -o 'by [0-9]\+ commits\?' \
-        | cut -d' ' -f2 \
-    )
-    STATUS="${STATUS}${COLOR_AHEAD}@${AHEAD_COUNT}"
+if [ "$IND_AHEAD" != '0' ]; then
+    if [ "$( echo $GIT_STATUS | grep 'is ahead' )" ]; then
+        STATUS="${STATUS}${COLOR_AHEAD}${IND_AHEAD}"
+
+        # append count?
+        if [ "$IND_AHEAD_COUNT" != '0' ]; then
+            AHEAD_COUNT=$( echo $GIT_STATUS \
+                | grep -o 'by [0-9]\+ commits\?' \
+                | cut -d' ' -f2 \
+            )
+            STATUS="${STATUS}${AHEAD_COUNT}"
+        fi
+    fi
 fi
 
 # output the status string

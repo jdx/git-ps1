@@ -15,6 +15,13 @@ CONFIGURATION
 -------------
 All configuration is done via GITPS1_* environment variables.
 
+Indicators (set to '0' to disable)
+  GITPS1_IND_STAGED      - Staged changes
+  GITPS1_IND_UNSTAGED    - Unstaged changes
+  GITPS1_IND_UNTRACKED   - Untracked files
+  GITPS1_IND_AHEAD       - Ahead of tracking branch
+  GITPS1_IND_AHEAD_COUNT - Whether to display number of commits ahead (e.g. @5)
+
 Colors:
   GITPS1_COLOR_DEFAULT   - Default color, used to display brackets and branch
   GITPS1_COLOR_FASTFWD   - Color used for fast-forward indicator and used to
