@@ -18,6 +18,11 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # #
 
+if [ -z $(__git_remotes) ]; then
+    __git_ps1
+    exit
+fi
+
 BRANCH=$(git symbolic-ref HEAD 2>/dev/null \
     || git rev-parse HEAD 2>/dev/null | cut -c1-10 \
 )
