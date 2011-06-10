@@ -98,4 +98,4 @@ if [ "$IND_AHEAD" != '0' ]; then
 fi
 
 # output the status string
-echo " $COLOR[${BRANCH}${STATUS}${COLOR}]"
+echo " $COLOR[${BRANCH}${STATUS}${COLOR}]\e[m"
