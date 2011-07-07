@@ -18,6 +18,9 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # #
 
+__git_ps1
+exit
+
 if [ -z $(__git_remotes) ]; then
     __git_ps1
     exit
